@@ -37,7 +37,6 @@ services:
     networks:
       - odoo_network
     restart: unless-stopped
-    command: odoo --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
 
 volumes:
   postgres_data:
