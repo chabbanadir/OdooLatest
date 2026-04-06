@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="beautiful_layout">
+        <!-- Ensure multi-company support -->
+        <t t-if="not o" t-set="o" t-value="doc"/>
+        <t t-if="not company">
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <div class="header" t-att-style="report_header_style">
+            <div class="row align-items-center" style="border-bottom: 3px solid #2C3E50; padding-bottom: 20px; margin-top: 20px;">
+                <div class="col-4">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 90px;" alt="Logo"/>
+                </div>
+                <div class="col-8 text-end" style="color: #2C3E50;">
+                    <h2 class="mb-1" style="font-weight: 800; letter-spacing: 1px;" t-esc="company.name"/>
+                    <div style="font-size: 14px; margin-top: 8px;">
+                        <span t-if="company.street"><t t-esc="company.street"/>, </span>
+                        <span t-if="company.city"><t t-esc="company.city"/></span>
+                    </div>
+                    <div style="font-size: 14px; margin-top: 4px;">
+                        <span t-if="company.phone">Tel: <t t-esc="company.phone"/></span>
+                        <span t-if="company.email"> | Email: <t t-esc="company.email"/></span>
+                        <span t-if="company.website"> | Web: <t t-esc="company.website"/></span>
+                    </div>
+                    <div style="font-size: 13px; margin-top: 4px; font-weight: bold;" t-if="company.vat">
+                        VAT: <t t-esc="company.vat"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <style>
+                .beautiful-title { color: #2C3E50; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 28px; margin-bottom: 20px; }
+                .beautiful-table { width: 100%; border-collapse: collapse; margin-top: 30px; margin-bottom: 30px; }
+                .beautiful-table th { background-color: #2C3E50; color: white; padding: 14px 10px; font-size: 14px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+                .beautiful-table td { border-bottom: 1px solid #ecf0f1; padding: 12px 10px; font-size: 15px; color: #2c3e50; }
+                .beautiful-table tr:nth-child(even) td { background-color: #fdfdfd; }
+                .beautiful-box { background: #f8f9fa; border-radius: 8px; padding: 20px; border-left: 5px solid #2C3E50; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+                .text-main { color: #2C3E50; font-weight: 700; }
+                .text-accent { color: #34495e; }
+                .totals-table { width: 100%; }
+                .totals-table td { padding: 10px; font-size: 15px; text-align: right; }
+                .totals-table td:first-child { text-align: right; padding-right: 20px; color: #7f8c8d; }
+                .total-row { font-weight: 800; font-size: 20px !important; color: #2C3E50 !important; border-top: 3px solid #2C3E50; }
+                .watermark { position: absolute; opacity: 0.05; font-size: 150px; transform: rotate(-45deg); top: 30%; left: 10%; z-index: -100; font-weight: bold; }
+            </style>
+            
+            <t t-out="0"/>
+        </div>
+
+        <div class="footer text-center" style="border-top: 1px solid #bdc3c7; padding-top: 20px; padding-bottom: 20px; font-size: 13px; color: #7f8c8d;">
+            <div t-if="company.report_footer" style="margin-bottom: 10px;">
+                <span t-field="company.report_footer"/>
+            </div>
+            <div>
+                <strong><t t-esc="company.name"/></strong> - Document generated electronically.
+            </div>
+            <div t-if="report_type == 'pdf'" class="text-muted mt-2 font-weight-bold">
+                Page: <span class="page"/> / <span class="topage"/>
+            </div>
+        </div>
+    </template>
+</odoo>
